@@ -1,7 +1,8 @@
 package com.prj.ai_agent.runner;
 
 import com.prj.ai_agent.dto.NoteDto;
-import com.prj.ai_agent.service.GeminiService;
+//import com.prj.ai_agent.service.GeminiService;
+import com.prj.ai_agent.service.GroqService;
 import com.prj.ai_agent.service.WebhookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -13,7 +14,8 @@ import java.util.Scanner;
 @RequiredArgsConstructor
 public class ConsoleRunner implements CommandLineRunner {
 
-    private final GeminiService geminiService;
+//    private final GeminiService geminiService;
+    private final GroqService groqService;
     private final WebhookService webhookService;
 
     @Override
@@ -38,7 +40,8 @@ public class ConsoleRunner implements CommandLineRunner {
 
             try {
                 // 2. AI에게 답변 받아오기
-                NoteDto result = geminiService.summarize(input);
+//                NoteDto result = geminiService.summarize(input);
+                NoteDto result = groqService.summarize(input);
 
                 if (result != null) {
                     // 3. 터미널에 먼저 출력해서 확인시켜주기 (검토 단계)
