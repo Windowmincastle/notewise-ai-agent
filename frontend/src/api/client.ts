@@ -10,8 +10,8 @@ const client = axios.create({
     "Content-Type": "application/json",
   },
 
-  // 요청 타임아웃 설정 (10초)
-  timeout: 600000,
+  // 요청 타임아웃 설정 (3분)
+  timeout: 180000,
 });
 
 // 2. (선택) 인터셉터 설정 - 에러 공통 처리 등을 할 때 유용합니다.

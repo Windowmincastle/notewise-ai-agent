@@ -29,13 +29,23 @@ export const useChat = () => {
       return data; // 성공 시 NoteDto 반환 (나중에 노션 저장 버튼 등에 활용)
     } catch (error) {
       console.error("채팅 중 오류 발생:", error);
-      alert(
-        "교수님이 답변 중 사레가 걸리셨나 봐요. 잠시 후 다시 시도해 주세요.",
-      );
+      alert("일시적 에러 발생. 잠시 후 다시 시도해 주세요.");
     } finally {
       setIsLoading(false);
     }
   };
 
-  return { messages, sendMessage, isLoading };
+  const saveNote = async (title: string, summary: string) => {
+    try {
+      const res = await chatService.saveToNotion({ title, summary });
+      alert(res);
+      return true;
+    } catch (err) {
+      console.error("노션 저장 실패", err);
+      alert("노션 저장에 실패했습니다.");
+      return false;
+    }
+  };
+
+  return { messages, sendMessage, saveNote, isLoading };
 };

@@ -60,7 +60,7 @@ public class ChatController {
 
         try {
             webhookService.sendToNotion(noteDto);
-            return ResponseEntity.ok("✅ 노션에 성공적으로 저장되었습니다.");
+            return ResponseEntity.ok("노션에 성공적으로 저장되었습니다.");
         } catch (Exception e) {
             log.error("❌ 노션 저장 중 오류 발생", e);
             return ResponseEntity.internalServerError().body("❌ 노션 저장에 실패했습니다.");
