@@ -1,9 +1,49 @@
 /* src/styles/theme.css */
 :root {
-  --bg-primary: #343541; /* ChatGPT 배경색 */
-  --bg-secondary: #444654; /* 입력창, 사이드바 배경 */
-  --text-primary: #ffffff;
-  --text-secondary: #d9d9e3;
-  --border-color: #565869;
-  --accent-color: #10a37f; /* ChatGPT 초록색 포인트 */
+  /* 따뜻하고 안정감 있는 색상 팔레트 */
+  --bg-primary: #f5f3ef;
+  --bg-secondary: #ffffff;
+  --bg-user: #2d2d2d;
+  --bg-assistant: transparent;
+
+  --text-primary: #2d2d2d;
+  --text-secondary: #5f5f5f;
+  --text-user: #ffffff;
+  --text-assistant: #2d2d2d;
+
+  --border-light: #e5e3df;
+  --border-medium: #d1cfc9;
+  --accent-color: #c47b4f;
+  --accent-hover: #a86841;
+
+  --shadow-soft: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  /* 타이포그래피 */
+  --font-display: "Spectral", "Georgia", serif;
+  --font-body:
+    -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", sans-serif;
+
+  --border-radius-sm: 12px;
+  --border-radius-md: 18px;
+  --border-radius-lg: 24px;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
 }

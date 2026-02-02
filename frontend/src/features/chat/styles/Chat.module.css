@@ -1,44 +1,304 @@
-/* 주요 변경 및 추가 부분 */
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  position: relative;
+  background: linear-gradient(135deg, #f5f3ef 0%, #e8e5df 100%);
+}
 
+/* Welcome Screen */
 .welcomeScreen {
   flex: 1;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding-bottom: 15vh; /* 중앙보다 약간 위로 배치하여 시각적 안정감 부여 */
+  padding: 2rem;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.welcomeContent {
+  text-align: center;
+  max-width: 600px;
 }
 
 .welcomeTitle {
-  font-size: 3rem; /* 더 크게 */
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: 2.75rem;
+  font-weight: 600;
   color: var(--text-primary);
-  text-align: center;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
 }
 
-/* 입력창 너비 최적화 */
+.welcomeSubtitle {
+  font-size: 1.125rem;
+  color: var(--text-secondary);
+  margin: 0;
+  font-weight: 400;
+}
+
+/* Message List */
+.messageList {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 1rem 8rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.messageList::-webkit-scrollbar {
+  width: 6px;
+}
+
+.messageList::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.messageList::-webkit-scrollbar-thumb {
+  background: var(--border-medium);
+  border-radius: 3px;
+}
+
+.messageList::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Message Wrapper */
+.messageWrapper {
+  display: flex;
+  flex-direction: column;
+  max-width: 720px;
+  margin: 0 auto;
+  width: 100%;
+  animation: slideUp 0.3s ease-out;
+}
+
+.userMessage {
+  align-items: flex-end;
+}
+
+.assistantMessage {
+  align-items: flex-start;
+}
+
+/* Message Bubble */
+.messageBubble {
+  padding: 1rem 1.25rem;
+  border-radius: var(--border-radius-md);
+  max-width: 85%;
+  word-wrap: break-word;
+  box-shadow: var(--shadow-soft);
+  transition: all 0.2s ease;
+}
+
+.userMessage .messageBubble {
+  background-color: var(--bg-user);
+  color: var(--text-user);
+  border-bottom-right-radius: 6px;
+}
+
+.assistantMessage .messageBubble {
+  background-color: var(--bg-secondary);
+  color: var(--text-assistant);
+  border: 1px solid var(--border-light);
+  border-bottom-left-radius: 6px;
+}
+
+.messageText {
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* Typing Indicator */
+.typingIndicator {
+  display: flex;
+  gap: 6px;
+  padding: 4px 0;
+}
+
+.typingIndicator span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--text-secondary);
+  opacity: 0.4;
+  animation: typing 1.4s infinite;
+}
+
+.typingIndicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+
+.typingIndicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%,
+  60%,
+  100% {
+    opacity: 0.4;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-8px);
+  }
+}
+
+/* Action Button */
+.actionButton {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--border-radius-sm);
+  color: var(--text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font-body);
+}
+
+.actionButton:hover {
+  background-color: var(--bg-secondary);
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+
+/* Input Container */
 .inputContainer {
-  position: absolute;
+  position: fixed;
   bottom: 0;
   left: 0;
-  right: 0; /* 좌우 꽉 채움 */
-  padding: 40px 20px; /* 아래쪽 여백 넉넉히 */
-  background-image: linear-gradient(
-    180deg,
-    rgba(52, 53, 65, 0) 0%,
-    rgba(52, 53, 65, 1) 70%
-  );
+  right: 0;
+  padding: 1.5rem 1rem 2rem 1rem;
+  background: linear-gradient(to top, var(--bg-primary) 60%, transparent 100%);
   display: flex;
   justify-content: center;
+  z-index: 10;
 }
 
 .inputWrapper {
   width: 100%;
-  max-width: 800px; /* 텍스트 가독성을 위한 너비 제한 */
+  max-width: 720px;
   background-color: var(--bg-secondary);
-  border: 1px solid var(--border-color);
-  border-radius: 16px; /* 더 둥글게 */
-  padding: 12px 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-light);
+  border-radius: var(--border-radius-lg);
+  padding: 0.75rem 0.75rem 0.75rem 1.25rem;
+  box-shadow: var(--shadow-medium);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transition: all 0.2s ease;
+}
+
+.inputWrapper:focus-within {
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 20px rgba(196, 123, 79, 0.12);
+}
+
+.input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-size: 0.9375rem;
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  line-height: 1.5;
+}
+
+.input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sendButton {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background-color: var(--accent-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.sendButton:hover:not(:disabled) {
+  background-color: var(--accent-hover);
+  transform: scale(1.05);
+}
+
+.sendButton:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: scale(1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .welcomeTitle {
+    font-size: 2rem;
+  }
+
+  .welcomeSubtitle {
+    font-size: 1rem;
+  }
+
+  .messageList {
+    padding: 1.5rem 1rem 7rem 1rem;
+  }
+
+  .messageBubble {
+    max-width: 90%;
+    padding: 0.875rem 1rem;
+  }
+
+  .inputContainer {
+    padding: 1rem 1rem 1.5rem 1rem;
+  }
+
+  .inputWrapper {
+    padding: 0.625rem 0.625rem 0.625rem 1rem;
+  }
 }
