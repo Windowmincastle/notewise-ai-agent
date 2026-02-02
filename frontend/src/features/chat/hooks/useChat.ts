@@ -15,17 +15,19 @@ export const useChat = () => {
     setIsLoading(true);
 
     try {
-      // 2. 백엔드 API 호출 (현재까지의 대화 이력을 포함해서 보냄)
       const data = await chatService.ask(text, messages);
 
-      // 3. AI의 응답(NoteDto)을 메시지 형식으로 변환하여 추가
+      // ✅ 핵심: parts[0]은 화면 노출용 본문, parts[1]은 내부 저장용 제목
       const aiMsg: ChatMessage = {
         role: "model",
-        parts: [{ text: data.summary }, { text: data.title }],
+        parts: [
+          { text: data.summary }, // index 0: 화면에 보여줄 본문
+          { text: data.title }, // index 1: 노션 저장 시 사용할 제목
+        ],
       };
 
       setMessages((prev) => [...prev, aiMsg]);
-      return data; // 성공 시 NoteDto 반환 (나중에 노션 저장 버튼 등에 활용)
+      return data;
     } catch (error) {
       console.error("채팅 중 오류 발생:", error);
       alert("일시적 에러 발생. 잠시 후 다시 시도해 주세요.");

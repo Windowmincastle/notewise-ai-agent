@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { useChat } from "../hooks/useChat"; // saveNote가 추가된 useChat 훅
 import styles from "../styles/Chat.module.css";
 import { Send } from "lucide-react"; // 아이콘 라이브러리
+import type { ChatMessage } from "../../../types";
 
 export const ChatWindow = () => {
   const [inputText, setInputText] = useState("");
@@ -17,22 +18,16 @@ export const ChatWindow = () => {
     await sendMessage(text);
   };
 
-  // ✅ [핵심 로직] 노션 저장 핸들러
-  const handleSave = async (fullText: string) => {
-    // 1. 화면에 보이는 텍스트에서 [TITLE]: 부분 파싱 (제목 추출)
-    // 정규식 설명: "[TITLE]: " 뒤에 오는 문자열을 찾고 줄바꿈(\n\n) 전까지 잡습니다.
-    const titleMatch = fullText.match(/\[TITLE\]: (.*?)\n\n/);
-    const title = titleMatch ? titleMatch[1] : "제목 없음";
-
-    // 2. [TITLE]: ... \n\n 부분을 제거하여 순수 본문만 남김
-    const summary = fullText.replace(/\[TITLE\]: .*?\n\n/, "").trim();
+  const handleSave = async (msg: ChatMessage) => {
+    // parts[1]에 숨겨둔 제목을 쓰고, 없으면 방어 로직으로 처리
+    const title = msg.parts[1]?.text || "제목 없음";
+    const summary = msg.parts[0].text;
 
     if (!summary) {
       alert("저장할 내용이 없습니다.");
       return;
     }
 
-    // 3. 훅(useChat)에 있는 저장 함수 호출 -> 백엔드 전송
     await saveNote(title, summary);
   };
 
@@ -76,7 +71,7 @@ export const ChatWindow = () => {
               {msg.role === "model" && !isLoading && (
                 <button
                   className={styles.actionButton}
-                  onClick={() => handleSave(msg.parts[0].text)}
+                  onClick={() => handleSave(msg)}
                 >
                   Notion에 저장
                 </button>
