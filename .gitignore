@@ -1,16 +1,23 @@
-# Java (Backend)
+# === [ Common ] ===
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# === [ Backend (Spring Boot / Gradle) ] ===
 backend/.gradle/
 backend/build/
 backend/out/
-backend/.idea/
-backend/*.iml
+backend/bin/
+# 보안 주의: API 키가 들어있는 설정 파일은 숨깁니다.
+backend/src/main/resources/application.yml
+backend/src/main/resources/application-secret.yml
 
-# Node.js (Frontend)
+# === [ Frontend (React / Node.js) ] ===
 frontend/node_modules/
 frontend/dist/
 frontend/.eslintcache
-frontend/.vscode/
-
-# OS
-.DS_Store
-Thumbs.db
+# Vite/React 환경 변수 파일
+frontend/.env
+frontend/.env.local
