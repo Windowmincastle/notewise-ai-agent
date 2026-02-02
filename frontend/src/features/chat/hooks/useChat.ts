@@ -3,13 +3,17 @@ import type { ChatMessage, NoteDto } from "../../../types";
 import { chatService } from "../services/chatService";
 
 export const useChat = () => {
-  const [messages, setMessages] = useState<ChatMessage[]>([]); // 대화 내역
-  const [isLoading, setIsLoading] = useState(false); // 로딩 상태
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [questionHistory, setQuestionHistory] = useState<string[]>([]);
 
   const sendMessage = async (text: string): Promise<NoteDto | undefined> => {
     if (!text.trim()) return;
 
-    // 1. 사용자의 메시지를 화면(상태)에 즉시 추가
+    // 질문 히스토리에 추가
+    setQuestionHistory((prev) => [...prev, text]);
+
+    // 사용자의 메시지를 화면(상태)에 즉시 추가
     const userMsg: ChatMessage = { role: "user", parts: [{ text }] };
     setMessages((prev) => [...prev, userMsg]);
     setIsLoading(true);
@@ -17,7 +21,7 @@ export const useChat = () => {
     try {
       const data = await chatService.ask(text, messages);
 
-      // ✅ 핵심: parts[0]은 화면 노출용 본문, parts[1]은 내부 저장용 제목
+      // AI 응답 추가
       const aiMsg: ChatMessage = {
         role: "model",
         parts: [
@@ -48,5 +52,5 @@ export const useChat = () => {
     }
   };
 
-  return { messages, sendMessage, saveNote, isLoading };
+  return { messages, sendMessage, saveNote, isLoading, questionHistory };
 };
