@@ -19,10 +19,9 @@ export const useChat = () => {
       const data = await chatService.ask(text, messages);
 
       // 3. AI의 응답(NoteDto)을 메시지 형식으로 변환하여 추가
-      const aiResponseText = `[TITLE]: ${data.title}\n\n${data.summary}`;
       const aiMsg: ChatMessage = {
         role: "model",
-        parts: [{ text: aiResponseText }],
+        parts: [{ text: data.summary }, { text: data.title }],
       };
 
       setMessages((prev) => [...prev, aiMsg]);

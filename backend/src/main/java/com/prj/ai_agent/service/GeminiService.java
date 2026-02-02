@@ -2,6 +2,7 @@ package com.prj.ai_agent.service;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.prj.ai_agent.config.PromptConstants;
 import com.prj.ai_agent.dto.NoteDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,30 +33,7 @@ public class GeminiService {
         String requestUrl = apiUrl + "?key=" + apiKey;
 
         // 1. System Instruction (Professor Persona)
-        String systemPrompt = """
-            [Persona]
-            You are a highly experienced IT Expert and a dedicated Professor. 
-            Your mission is to guide students and knowledge seekers by providing kind, 
-            encouraging, and very detailed explanations. 
-            You excel at breaking down complex concepts into easy-to-understand pedagogical lessons.
-
-            [Strict Language Rules]
-            1. Output Language: Write the final response in KOREAN.
-            2. Language Purity: NEVER use Chinese characters (Hanja) or Japanese particles (e.g., つ의).
-            3. Technical Terms: Use the format 'Korean(English)'. Example: 가상화(Virtualization).
-            4. Tone: Kind, academic yet accessible, and professional. 
-            5. No Markdown: Avoid symbols like '###' or '**'. Use [ Title ] and line breaks instead.
-            
-                [Response Structure & Format]
-                Every response MUST follow this structure:
-                - [ 1. 개념 정의 및 배경 ] / [ 2. 핵심 원리 ] / [ 3. 실무 사례 ] / [ 4. 핵심 요약 ]
-                
-                You MUST wrap your response with these tags for parsing:
-                [TITLE]
-                (Catchy Title in Korean)
-                [SUMMARY]
-                (Detailed body content in Korean)
-            """;
+        String systemPrompt = PromptConstants.PROFESSOR_SYSTEM_PROMPT;
 
         // 2. User Prompt 구성 및 대화 이력(chatHistory)에 추가
         String userPrompt = "Professor, please explain this topic: " + userInput;
@@ -97,7 +75,6 @@ public class GeminiService {
         }
     }
 
-    // 기존 파싱 로직 (질문자님 코드 그대로 유지)
     private NoteDto parseResponse(String jsonResponse, String originalInput) {
         try {
             JsonNode root = objectMapper.readTree(jsonResponse);
@@ -105,19 +82,37 @@ public class GeminiService {
                     .path("content").path("parts").get(0)
                     .path("text").asText();
 
-            String title = extractTagValue(text, "[TITLE]", "[SUMMARY]");
-            String summary = extractTagValue(text, "[SUMMARY]", null);
+            // 정규표현식을 사용하여 태그 사이의 내용을 더 유연하게 추출
+            String title = "";
+            String summary = "";
 
-            if (title.isEmpty()) title = "제목 없음";
-            if (summary.isEmpty()) summary = "요약 내용을 찾을 수 없습니다.";
+            if (text.contains("[TITLE]")) {
+                int titleStart = text.indexOf("[TITLE]") + "[TITLE]".length();
+                int titleEnd = text.contains("[SUMMARY]") ? text.indexOf("[SUMMARY]") : text.length();
+                title = text.substring(titleStart, titleEnd).trim();
+            }
+
+            if (text.contains("[SUMMARY]")) {
+                int summaryStart = text.indexOf("[SUMMARY]") + "[SUMMARY]".length();
+                summary = text.substring(summaryStart).trim();
+            }
+
+            // 만약 AI가 태그를 아예 안 줬을 경우를 대비한 방어 로직
+            if (title.isEmpty()) {
+                // 질문의 앞부분 10글자를 제목으로 자동 생성
+                title = originalInput.length() > 15 ? originalInput.substring(0, 15) + "..." : originalInput;
+            }
+            if (summary.isEmpty()) {
+                // 태그가 없으면 전체 텍스트를 본문으로 간주
+                summary = text.replace("[TITLE]", "").replace("[SUMMARY]", "").trim();
+            }
 
             NoteDto noteDto = new NoteDto();
             noteDto.setTitle(title);
             noteDto.setSummary(summary);
-
             return noteDto;
         } catch (Exception e) {
-            log.error("❌ 데이터 추출 중 에러 발생", e);
+            log.error("❌ 파싱 실패", e);
             return null;
         }
     }
