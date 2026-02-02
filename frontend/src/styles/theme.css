@@ -1,0 +1,9 @@
+/* src/styles/theme.css */
+:root {
+  --bg-primary: #343541; /* ChatGPT 배경색 */
+  --bg-secondary: #444654; /* 입력창, 사이드바 배경 */
+  --text-primary: #ffffff;
+  --text-secondary: #d9d9e3;
+  --border-color: #565869;
+  --accent-color: #10a37f; /* ChatGPT 초록색 포인트 */
+}

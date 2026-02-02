@@ -1,0 +1,44 @@
+/* 주요 변경 및 추가 부분 */
+
+.welcomeScreen {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 15vh; /* 중앙보다 약간 위로 배치하여 시각적 안정감 부여 */
+}
+
+.welcomeTitle {
+  font-size: 3rem; /* 더 크게 */
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+/* 입력창 너비 최적화 */
+.inputContainer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0; /* 좌우 꽉 채움 */
+  padding: 40px 20px; /* 아래쪽 여백 넉넉히 */
+  background-image: linear-gradient(
+    180deg,
+    rgba(52, 53, 65, 0) 0%,
+    rgba(52, 53, 65, 1) 70%
+  );
+  display: flex;
+  justify-content: center;
+}
+
+.inputWrapper {
+  width: 100%;
+  max-width: 800px; /* 텍스트 가독성을 위한 너비 제한 */
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 16px; /* 더 둥글게 */
+  padding: 12px 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
