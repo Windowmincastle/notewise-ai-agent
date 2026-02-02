@@ -1,0 +1,16 @@
+# Java (Backend)
+backend/.gradle/
+backend/build/
+backend/out/
+backend/.idea/
+backend/*.iml
+
+# Node.js (Frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/.eslintcache
+frontend/.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
