@@ -34,50 +34,47 @@ public class GroqService {
     public NoteDto summarize(String userInput) {
         log.info("🚀 Groq(Llama 3)에게 지식 탐색 요청 중: {}", userInput);
 
-        // 🔥 Groq(OpenAI) 스타일의 프롬프트 구성
-        String prompt = """
-                너는 'IT 전문 지식인이자 친절한 기술 블로그 작가'야. 
-                사용자의 질문에 대해 풍부한 내용을 담아 상세하고 친절하게 설명해줘.
-                
-                [사용자 질문]: %s
-                
-                   - 절대 한자(漢字)를 섞어 쓰지 마. (예: 任何 -> 어떤, 必須 -> 필수)
-                [작성 지침 - 반드시 준수!]
-                1. **언어 설정**: 반드시 한국어로만 답변해. 
-                   - 기술 용어는 '한글(영어)' 형태로 작성해.
-                2. **상세도**: 질문에 대해 최소 1000자 이상의 충분한 분량으로 상세하게 설명해. 
-                   - "간단하게"라고 질문해도 전문가로서 깊이 있는 내용을 포함해줘.
-                3. **구조화**: 
-                   - [ 1. 개념 정의 및 배경 ]
-                   - [ 2. 핵심 원리 및 상세 설명 ]
-                   - [ 3. 실무 활용 사례 및 예시 코드 ]
-                   - [ 4. 장단점 및 주의사항 ]
-                   - [ 5. 한 줄 핵심 요약 ]
-                4. **가독성**: 마크다운 기호(###, **)는 절대 쓰지 말고, [ 제목 ]과 줄바꿈으로만 구분해.
-                
-                ---형식 시작---
-                [TITLE]
-                (질문을 관통하는 매력적인 제목)
-                
-                [SUMMARY]
-                (위의 지침 1~4번을 모두 반영한 상세한 본문 내용)
-                ---형식 끝---
-                """.formatted(userInput);
+        // 1. System Message: 페르소나 + 언어 규칙 + 출력 구조 정의
+        String systemPrompt = """
+            너는 '한국어 기술 블로그 작가'이자 'IT 전문 지식인'이다.
+            
+            [핵심 규칙]
+            1. 모든 답변은 오직 '한국어'로만 작성하며 한자(漢字)는 절대 사용하지 않는다.
+            2. 기술 용어는 '한글(영어)' 형태로 작성한다.
+            3. 답변은 다음 4가지 섹션을 반드시 포함하여 상세히 작성한다:
+               - [ 1. 개념 정의 ] / [ 2. 상세 설명 ] / [ 3. 실무 사례 ] / [ 4. 핵심 요약 ]
+            4. 마크다운 기호(###, **)는 절대 사용하지 말고 [ 제목 ]과 줄바꿈으로만 가독성을 높인다.
 
-        // 🔥 Groq 전용 JSON 바디 구성 (OpenAI 호환 규격)
+            [출력 형식 가이드]
+            답변 시 아래의 형식을 엄격히 준수할 것:
+            ---
+            [TITLE]
+            (여기에 주제 제목 작성)
+            
+            [SUMMARY]
+            (여기에 1~4번 섹션을 포함한 상세 본문 작성)
+            ---
+            """;
+
+        // 2. User Message: 순수하게 질문 내용만 전달
+        // 이제 User Role은 "이 질문에 대해 알려줘"라는 트리거 역할만 수행합니다.
+        String userPrompt = "사용자 질문: " + userInput;
+
+        // 🔥 Groq 요청 바디 구성 (system 역할 추가 및 temperature 하향)
         Map<String, Object> requestBody = Map.of(
                 "model", model,
                 "messages", List.of(
-                        Map.of("role", "user", "content", prompt)
+                        Map.of("role", "system", "content", systemPrompt),
+                        Map.of("role", "user", "content", userPrompt)
                 ),
-                "temperature", 0.7
+                "temperature", 0.3 // 0.7에서 0.3으로 낮춰 창의성보다는 정확도와 규칙 준수에 집중
         );
 
         try {
             RestTemplate restTemplate = new RestTemplate();
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(apiKey); // Groq은 Bearer 인증을 사용합니다.
+            headers.setBearerAuth(apiKey);
 
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
             String response = restTemplate.postForObject(apiUrl, entity, String.class);
@@ -89,6 +86,7 @@ public class GroqService {
         }
     }
 
+    // 기존 parseResponse 및 extractTagValue 로직은 동일하게 유지
     private NoteDto parseResponse(String jsonResponse) {
         try {
             JsonNode root = objectMapper.readTree(jsonResponse);
@@ -97,34 +95,8 @@ public class GroqService {
 
             log.info("📝 Groq 응답 수신 완료");
 
-            String title = "";
-            String summary = "";
-
-            // 1. 제목 추출 시도 ([TITLE] 또는 [제목])
-            if (text.contains("[TITLE]")) {
-                title = extractTagValue(text, "[TITLE]", "["); // 다음 태그 전까지
-            } else if (text.contains("[제목]")) {
-                title = extractTagValue(text, "[제목]", "[");
-            }
-
-            // 2. 제목 이후의 모든 내용을 Summary로 취급
-            // 제목 태그가 끝나는 지점을 찾습니다.
-            int summaryStartIndex = -1;
-            if (text.contains("[SUMMARY]")) {
-                summaryStartIndex = text.indexOf("[SUMMARY]") + "[SUMMARY]".length();
-            } else {
-                // [제목]이나 [TITLE]이 끝나는 지점 다음부터 모두 본문으로 간주
-                int titleIndex = text.indexOf("]");
-                if (titleIndex != -1) {
-                    summaryStartIndex = text.indexOf("\n", titleIndex);
-                }
-            }
-
-            if (summaryStartIndex != -1 && summaryStartIndex < text.length()) {
-                summary = text.substring(summaryStartIndex).trim();
-            } else {
-                summary = text; // 파싱 실패 시 전체 출력
-            }
+            String title = extractTagValue(text, "[TITLE]", "[SUMMARY]");
+            String summary = extractTagValue(text, "[SUMMARY]", null);
 
             return new NoteDto(
                     title.isEmpty() ? "요약 노트" : title,

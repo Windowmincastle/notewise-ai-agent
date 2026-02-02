@@ -1,29 +1,35 @@
 package com.prj.ai_agent.runner;
 
 import com.prj.ai_agent.dto.NoteDto;
-//import com.prj.ai_agent.service.GeminiService;
-import com.prj.ai_agent.service.GroqService;
+import com.prj.ai_agent.service.GeminiService;
 import com.prj.ai_agent.service.WebhookService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ConsoleRunner implements CommandLineRunner {
 
-//    private final GeminiService geminiService;
-    private final GroqService groqService;
+    private final GeminiService geminiService;
     private final WebhookService webhookService;
+
+    // 대화 맥락을 저장할 메모리 리스트 (최근 5턴 = 메시지 10개 유지)
+    private final List<Map<String, Object>> conversationContext = new ArrayList<>();
 
     @Override
     public void run(String... args) {
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("\n============================================");
-        System.out.println("   🤖 AI 지식 비서 (검토 후 저장 모드)   ");
+        System.out.println("   🤖 AI 교수님 (대화 맥락 유지 모드)   ");
         System.out.println("============================================");
 
         while (true) {
@@ -39,16 +45,23 @@ public class ConsoleRunner implements CommandLineRunner {
             if (input.trim().isEmpty()) continue;
 
             try {
-                // 2. AI에게 답변 받아오기
-//                NoteDto result = geminiService.summarize(input);
-                NoteDto result = groqService.summarize(input);
+                // [슬라이딩 윈도우] 대화 이력이 10개(5턴) 이상이면 가장 오래된 '질문-답변' 쌍을 제거
+                // summarize 내부에서 유저 질문 1개, AI 답변 1개가 추가되므로 10개일 때 미리 2개를 비웁니다.
+                while (conversationContext.size() >= 10) {
+                    conversationContext.remove(0); // 가장 오래된 유저 질문 삭제
+                    conversationContext.remove(0); // 그에 대한 AI 답변 삭제
+                    log.info("♻️ 오래된 대화 맥락을 정리했습니다. (최근 5턴 유지)");
+                }
+
+                // 2. AI에게 답변 받아오기 (현재 질문과 이전 대화 맥락 전달)
+                NoteDto result = geminiService.summarize(input, conversationContext);
 
                 if (result != null) {
-                    // 3. 터미널에 먼저 출력해서 확인시켜주기 (검토 단계)
+                    // 3. 터미널 출력 및 검토
                     System.out.println("\n--------------------------------------------------");
-                    System.out.println("📢 [AI 답변]");
+                    System.out.println("📢 [AI 교수님 강의 내용]");
                     System.out.println("제목: " + result.getTitle());
-                    System.out.println("내용:\n" + result.getSummary()); // AI가 준 답변 전체 출력
+                    System.out.println("내용:\n" + result.getSummary());
                     System.out.println("--------------------------------------------------");
 
                     // 4. 저장 여부 묻기
@@ -56,19 +69,18 @@ public class ConsoleRunner implements CommandLineRunner {
                     String saveChoice = scanner.nextLine();
 
                     if ("y".equalsIgnoreCase(saveChoice.trim())) {
-                        // 'y'를 눌렀을 때만 웹훅 발사!
                         webhookService.sendToNotion(result);
-                        System.out.println("✅ 저장 완료! 다음 질문을 주세요.");
+                        System.out.println("✅ 노션 저장 완료! 다음 질문을 입력하세요.");
                     } else {
-                        // 'n' 또는 다른 키를 누르면 패스
-                        System.out.println("❌ 저장하지 않고 넘어갑니다.");
+                        System.out.println("❌ 저장하지 않았습니다. 대화를 계속 이어갈 수 있습니다.");
                     }
 
                 } else {
-                    System.out.println("⚠️ AI가 응답하지 않았습니다.");
+                    System.out.println("⚠️ AI 교수님이 응답하지 않았습니다.");
                 }
 
             } catch (Exception e) {
+                log.error("❌ 처리 중 오류 발생", e);
                 System.out.println("❌ 에러 발생: " + e.getMessage());
             }
         }

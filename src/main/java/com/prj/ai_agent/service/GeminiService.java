@@ -1,4 +1,5 @@
 package com.prj.ai_agent.service;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prj.ai_agent.dto.NoteDto;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Slf4j
-//@Service
+@Service
 @RequiredArgsConstructor
 public class GeminiService {
 
@@ -25,40 +26,48 @@ public class GeminiService {
 
     private final ObjectMapper objectMapper;
 
-    public NoteDto summarize(String userInput) {
-        log.info("🤖 AI에게 지식 탐색 요청 중: {}", userInput);
+    public NoteDto summarize(String userInput, List<Map<String, Object>> chatHistory) {
+        log.info("🤖 Gemini 2.5 Flash-Lite (Context Mode) - Input: {}", userInput);
 
         String requestUrl = apiUrl + "?key=" + apiKey;
 
-        String prompt = """
-                너는 '지식을 명쾌하게 전달하는 IT 전문가 혹은 교수'야. 
-                사용자의 질문에 대해 군더더기 없이 깔끔하고 가독성 좋게 설명해줘.
-                
-                [사용자 질문]: %s
-                
-                [작성 지침]
-                1. **톤앤매너**: 친절하고 차분한 어조로, 핵심 위주로 상세하게 설명해.
-                2. **가독성 최우선**: 
-                   - 특수 마크다운 기호(###, **)는 절대 사용하지 마.
-                   - 섹션 구분은 `[ 제목 ]` 형태를 사용하고, 문단 사이에는 충분한 줄바꿈을 넣어.
-                   - 복잡한 내용은 번호(1, 2, 3)나 기호(-)를 활용해 단계적으로 풀어서 써줘.
-                3. **내용 구성**:
-                   - 주제에 대한 명확한 정의
-                   - 상세한 원리 및 특징 설명
-                   - 실무 예시 또는 코드 예시 (필요한 경우 포함)
-                   - 마지막에 핵심 내용을 한눈에 보기 좋게 요약
-                
-                ---형식 시작---
-                [TITLE]
-                (주제를 명확히 나타내는 제목)
-                
-                [SUMMARY]
-                (위 지침을 준수한 본문 내용)
-                ---형식 끝---
-                """.formatted(userInput);
+        // 1. System Instruction (Professor Persona)
+        String systemPrompt = """
+            [Persona]
+            You are a highly experienced IT Expert and a dedicated Professor. 
+            Your mission is to guide students and knowledge seekers by providing kind, 
+            encouraging, and very detailed explanations. 
+            You excel at breaking down complex concepts into easy-to-understand pedagogical lessons.
 
+            [Strict Language Rules]
+            1. Output Language: Write the final response in KOREAN.
+            2. Language Purity: NEVER use Chinese characters (Hanja) or Japanese particles (e.g., つ의).
+            3. Technical Terms: Use the format 'Korean(English)'. Example: 가상화(Virtualization).
+            4. Tone: Kind, academic yet accessible, and professional. 
+            5. No Markdown: Avoid symbols like '###' or '**'. Use [ Title ] and line breaks instead.
+            
+                [Response Structure & Format]
+                Every response MUST follow this structure:
+                - [ 1. 개념 정의 및 배경 ] / [ 2. 핵심 원리 ] / [ 3. 실무 사례 ] / [ 4. 핵심 요약 ]
+                
+                You MUST wrap your response with these tags for parsing:
+                [TITLE]
+                (Catchy Title in Korean)
+                [SUMMARY]
+                (Detailed body content in Korean)
+            """;
+
+        // 2. User Prompt 구성 및 대화 이력(chatHistory)에 추가
+        String userPrompt = "Professor, please explain this topic: " + userInput;
+        // 현재 질문을 대화 이력에 넣습니다.
+        chatHistory.add(Map.of("role", "user", "parts", List.of(Map.of("text", userPrompt))));
+
+        // 3. JSON Body Construction (전체 chatHistory를 contents에 넣음)
         Map<String, Object> requestBody = Map.of(
-                "contents", List.of(Map.of("parts", List.of(Map.of("text", prompt))))
+                "system_instruction", Map.of(
+                        "parts", List.of(Map.of("text", systemPrompt))
+                ),
+                "contents", chatHistory
         );
 
         try {
@@ -70,69 +79,57 @@ public class GeminiService {
                     .retrieve()
                     .body(String.class);
 
+            // 4. AI 답변을 이력에 추가하기 위해 텍스트만 먼저 추출
+            JsonNode root = objectMapper.readTree(response);
+            String aiText = root.path("candidates").get(0)
+                    .path("content").path("parts").get(0)
+                    .path("text").asText();
+
+            // 모델의 답변도 대화 이력에 저장 (다음 대화의 맥락이 됨)
+            chatHistory.add(Map.of("role", "model", "parts", List.of(Map.of("text", aiText))));
+
+            // 5. 기존 파싱 메서드 호출하여 NoteDto 반환
             return parseResponse(response, userInput);
+
         } catch (Exception e) {
-            log.error("Gemini 호출 실패", e);
+            log.error("❌ Gemini API Call Failed", e);
             return null;
         }
     }
 
-    // JSON 파싱 안 함! -> 직접 텍스트 자르기 (훨씬 튼튼함)
+    // 기존 파싱 로직 (질문자님 코드 그대로 유지)
     private NoteDto parseResponse(String jsonResponse, String originalInput) {
         try {
-            // 1. 구글 응답에서 'text' 알맹이만 꺼내기 (여기는 JSON 구조가 맞음)
             JsonNode root = objectMapper.readTree(jsonResponse);
             String text = root.path("candidates").get(0)
                     .path("content").path("parts").get(0)
                     .path("text").asText();
 
-            // 디버깅용 로그 (잘라내기 전 원본 텍스트 확인)
-            log.info("📝 AI 원본 응답 텍스트:\n{}", text);
-
-            // 2. [태그]를 기준으로 데이터 잘라내기
             String title = extractTagValue(text, "[TITLE]", "[SUMMARY]");
             String summary = extractTagValue(text, "[SUMMARY]", null);
 
-            // 3. 데이터 다듬기 (공백 제거 등)
             if (title.isEmpty()) title = "제목 없음";
             if (summary.isEmpty()) summary = "요약 내용을 찾을 수 없습니다.";
 
-
-
-            // 4. DTO 생성 및 반환
             NoteDto noteDto = new NoteDto();
             noteDto.setTitle(title);
             noteDto.setSummary(summary);
 
             return noteDto;
-
         } catch (Exception e) {
             log.error("❌ 데이터 추출 중 에러 발생", e);
             return null;
         }
     }
 
-    // 텍스트 사이의 내용을 발라내는 도우미 메서드
     private String extractTagValue(String text, String startTag, String endTag) {
         try {
             int startIndex = text.indexOf(startTag);
             if (startIndex == -1) return "";
-
             startIndex += startTag.length();
-
-            int endIndex;
-            if (endTag != null) {
-                endIndex = text.indexOf(endTag, startIndex);
-            } else {
-                endIndex = text.length(); // 끝 태그가 없으면 끝까지
-            }
-
+            int endIndex = (endTag != null) ? text.indexOf(endTag, startIndex) : text.length();
             if (endIndex == -1) endIndex = text.length();
-
             return text.substring(startIndex, endIndex).trim();
-        } catch (Exception e) {
-            return "";
-        }
+        } catch (Exception e) { return ""; }
     }
-
 }
