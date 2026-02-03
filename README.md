@@ -1,18 +1,19 @@
-# NoteWise Toy Project
-### AI Agentic Workflow for Automated Knowledge Archiving
+# 📝 NoteWise Toy Project
+### : AI Agentic Workflow for Automated Knowledge Archiving
+
 > **NoteWise**는 Gemini AI와 Spring Boot, Make 자동화를 결합하여, 대화 내용을 Notion 지식 베이스로 즉시 구조화하는 **AI 에이전트 서비스**입니다.
 
 <br/>
 
-## 프로젝트 소개
+## 📢 프로젝트 소개
 
-### 개발 배경
+### 1. 개발 배경
 평소 개발 학습과 프로젝트를 진행하며 하루에도 수십 번씩 AI와 기술적인 토의를 합니다. 하지만 이 과정에서 두 가지 결정적인 한계를 느꼈습니다.
 
 1.  **복사 & 붙여넣기의 비효율**: AI가 생성한 통찰력 있는 코드나 개념 설명을 다시 Notion에 옮겨 적는 과정이 너무 번거로웠고, 귀찮음으로 인해 유실되는 지식이 너무 많았습니다.
 2.  **AI의 행동 제약**: LLM(Gemini)은 똑똑한 '뇌'를 가졌지만, 스스로 외부 시스템에 데이터를 저장하는 '손발'이 없습니다. "이거 저장해줘"라고 말하면 실제로 저장하는 것이 아니라, 텍스트로만 대답할 뿐입니다.
 
-### 프로젝트 목표
+### 2. 프로젝트 목표
 **NoteWise**는 이러한 불편함을 없애고자 시작되었습니다.
 * **Knowledge Archiving Automation**: 사용자가 AI와 대화하는 것만으로, 학습 내용과 개발 산출물이 자동으로 정리되어 데이터베이스에 쌓입니다.
 * **Bridge the Gap**: Spring Boot 서버를 구축하여 AI의 텍스트 응답을 실질적인 '데이터'로 변환하고, Make(Webhook)를 통해 Notion API를 트리거합니다.
@@ -22,7 +23,7 @@
 
 <br/>
 
-## 기술 스택
+## 🛠 기술 스택
 
 ### Backend
 ![Java](https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
@@ -42,7 +43,7 @@
 
 <br/>
 
-## 주요 기능
+## 📌 주요 기능
 
 | 기능 | 설명 |
 | :--- | :--- |
@@ -53,17 +54,11 @@
 
 <br/>
 
+## ⚙️ 시스템 아키텍처
 
-
-## 시스템 아키텍처
-<img width="2816" height="1536" alt="Image" src="https://github.com/user-attachments/assets/d4103abf-700c-4894-a8d0-cec5d60c5922" />
-
-
+<img width="2816" height="1536" alt="System Architecture" src="https://github.com/user-attachments/assets/d4103abf-700c-4894-a8d0-cec5d60c5922" />
 
 <br/>
-
-
-
 
 1.  **User Input (React)**: 사용자가 NoteWise 채팅 인터페이스를 통해 질문하거나 저장을 요청합니다.
 2.  **Context Management (Spring Boot)**: 서버는 Sliding Window 기법으로 대화 맥락을 최적화하여 Gemini API에 전달합니다.
@@ -73,51 +68,66 @@
 
 <br/>
 
-## 화면
-*화면 [1]
+## 📱 실행 화면
+
+### 화면 [1]
 <img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/eb5b59a4-1d7a-4452-9eeb-789d7d50668b" />
+
 <br/>
-화면 [2]
+
+### 화면 [2]
 <img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/1120a663-0012-48ab-9001-49635ed134b5" />
+
 <br/>
-화면 [3]
+
+### 화면 [3]
 <img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/556c6ef3-961c-4eb2-86cb-151644c11f53" />
+
 <br/>
-화면 [4]
+
+### 화면 [4]
 <img width="1920" height="1080" alt="4" src="https://github.com/user-attachments/assets/6f654e55-5efb-4f17-9335-b12e0e4732ac" />
+
 <br/>
-화면 [5]
+
+### 화면 [5]
 <img width="1909" height="984" alt="5" src="https://github.com/user-attachments/assets/61bb2a5c-4394-4d92-b90e-6996f02f1b95" />
+
 <br/>
-화면 [6]
+
+### 화면 [6]
 <img width="1920" height="1080" alt="6" src="https://github.com/user-attachments/assets/d6cf6bac-1499-49d6-a7b9-037e8bbed4ca" />
+
 <br/>
-화면 [7]
+
+### 화면 [7]
 <img width="1920" height="1080" alt="7" src="https://github.com/user-attachments/assets/3b5f8c15-52d8-4111-9f75-3eb56c706379" />
+
 <br/>
-화면 [8]
+
+### 화면 [8]
 <img width="1920" height="1080" alt="8" src="https://github.com/user-attachments/assets/c17911b6-fd2e-49c7-bcd4-a5b9039206dc" />
+
 <br/>
-화면 [9]
+
+### 화면 [9]
 <img width="1915" height="987" alt="9" src="https://github.com/user-attachments/assets/f52e23f8-781a-4b9e-afd5-6e81e2484b33" />
+
 <br/>
 
+## 💡 기술적 도전 및 회고 (Technical Challenges)
 
+### 1. Server-Side Orchestration을 통한 Action 실행 구현
+LLM(Gemini)은 본질적으로 텍스트를 생성하는 추론 엔진(Inference Engine)일 뿐, 외부 시스템과 통신하거나 실제 로직을 수행할 수 있는 실행 환경(Runtime)이 없습니다.
+* **해결:** Spring Boot 서버를 AI의 추론 결과를 실제 동작으로 연결하는 **Execution Layer(실행 계층)**로 구축했습니다.
+    * **Structured Output:** AI가 자연어가 아닌, 시스템이 처리 가능한 구조화된 데이터(JSON)를 반환하도록 프롬프트 엔지니어링을 적용했습니다.
+    * **API Triggering:** 서버는 AI의 응답 페이로드를 파싱하여 저장 요청임을 식별하고, 사전에 정의된 **Make Webhook**으로 요청을 전송합니다.
+    * 이를 통해 **LLM의 의도 파악 능력**과 **서버의 로직 실행 능력**을 결합하여, 실질적인 업무 자동화를 수행하는 **Agentic Workflow**를 완성했습니다.
 
-
-
-## 기술적 도전 및 회고
-
-### 1. AI에게 행동력 부여하기
-가장 큰 고민은 "AI는 텍스트만 뱉을 뿐, 행동하지 않는다"는 점이었습니다. AI가 아무리 완벽한 요약본을 만들어도, 웹훅을 쏘는 기능은 없기 때문입니다.
-* **해결:** 백엔드 서버를 AI의 '신체(Body)'로 정의했습니다. AI가 반환한 데이터를 서버가 가로채서(Intercept), **Make Webhook**으로 `POST` 요청을 보내는 구조를 설계했습니다. 이를 통해 "AI 모델(Brain) + 백엔드 로직(Body) = 에이전트(Agent)"가 작동하는 원리를 직접 구현하고 이해했습니다.
-
-### 2. Context 유지와 비용 최적화
-API를 사용할 때 전체 대화 내역을 매번 전송하는 것은 비용과 속도 면에서 비효율적이었습니다.
+### 2. Sliding Window를 통한 Context 최적화
+API를 사용할 때 전체 대화 내역을 매번 전송하는 것은 비용 증가와 응답 속도 저하를 야기합니다.
 * **해결:** Java의 `List` 자료구조를 활용해 최근 N개의 대화 턴(Turn)만 유지하는 **Sliding Window** 알고리즘을 적용했습니다. 이를 통해 현재 주제에 대한 논리적 연속성은 유지하면서도 시스템 리소스를 효율적으로 관리했습니다.
 
-### 3. 데이터 자산화
+### 3. 데이터 자산화 (Data Archiving)
 기존에는 휘발되던 개발 고민과 문제 해결 과정들이 NoteWise를 통해 자동으로 축적되기 시작했습니다.
 * **성과:** 별도의 정리 시간 없이도 Notion에 쌓인 데이터들은 향후 저만의 **Personal Knowledge Base**가 되어, 추후 RAG 시스템이나 개인화된 AI 모델을 구축하는 데 귀중한 자산이 될 것입니다.
-
-<br/>
