@@ -71,6 +71,10 @@
 
 <br/>
 <br/>
+
+
+
+
 1.  **User Input (React)**: 사용자가 NoteWise 채팅 인터페이스를 통해 질문하거나 저장을 요청합니다.
 2.  **Context Management (Spring Boot)**: 서버는 Sliding Window 기법으로 대화 맥락을 최적화하여 Gemini API에 전달합니다.
 3.  **Intelligence (Gemini API)**: AI는 사용자 의도를 파악하고, Notion에 저장하기 적합한 형태(JSON/Markdown)로 내용을 구조화합니다.
