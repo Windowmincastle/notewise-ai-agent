@@ -25,8 +25,6 @@
 <br/>
 
 ## 시스템 아키텍처
-
-![System Architecture](<img width="2816" height="1536" alt="Image" src="https://github.com/user-attachments/assets/d4103abf-700c-4894-a8d0-cec5d60c5922" />)
 <img width="2816" height="1536" alt="Image" src="https://github.com/user-attachments/assets/d4103abf-700c-4894-a8d0-cec5d60c5922" />
 1.  **User Input (React)**: 사용자가 NoteWise 채팅 인터페이스를 통해 질문하거나 저장을 요청합니다.
 2.  **Context Management (Spring Boot)**: 서버는 Sliding Window 기법으로 대화 맥락을 최적화하여 Gemini API에 전달합니다.
