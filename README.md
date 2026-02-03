@@ -1,7 +1,5 @@
-# NoteWise
+# NoteWise Toy Project
 ### AI Agentic Workflow for Automated Knowledge Archiving
-
-> **"Brain(AI) needs Body(Server) to act."**
 > **NoteWise**는 Gemini AI와 Spring Boot, Make 자동화를 결합하여, 대화 내용을 Notion 지식 베이스로 즉시 구조화하는 **AI 에이전트 서비스**입니다.
 
 <br/>
@@ -48,10 +46,10 @@
 
 | 기능 | 설명 |
 | :--- | :--- |
-| **💬 Smart Chat Interface** | React 19 기반의 부드러운 채팅 UI. |
+| **💬 Smart Chat Interface** | React 19 기반의 채팅 UI. |
 | **⚡ Notion Webhook Trigger** | 핵심 기능. AI가 정리한 내용을 서버가 받아 Make의 Webhook URL로 전송, Notion DB에 즉시 저장합니다. |
-| **🧠 Archivist Persona** | AI에게 단순 챗봇이 아닌 'IT 전문가' 페르소나를 부여하여, 나중에 찾아보기 쉬운 형태(요약, 태그 등)로 답변하도록 튜닝했습니다. |
-| **🔄 End-to-End Workflow** | `질문 -> 분석 -> 구조화 -> 적재`의 전 과정을 사용자의 추가 개입 없이 한 번의 대화로 완료합니다. |
+| **🧠 Archivist Persona** | AI에게 단순 챗봇이 아닌 'IT 전문가' 페르소나를 부여하여, 나중에 찾아보기 쉬운 형태(요약, 태그 등)로 답변하도록 튜닝. |
+| **🔄 End-to-End Workflow** | `질문 -> 분석 -> 구조화 -> 적재`의 전 과정을 사용자의 추가 개입 없이 한 번의 대화로 완료. |
 
 <br/>
 
@@ -61,6 +59,8 @@
 <img width="2816" height="1536" alt="Image" src="https://github.com/user-attachments/assets/d4103abf-700c-4894-a8d0-cec5d60c5922" />
 
 
+
+<br/>
 1.  **User Input (React)**: 사용자가 NoteWise 채팅 인터페이스를 통해 질문하거나 저장을 요청합니다.
 2.  **Context Management (Spring Boot)**: 서버는 Sliding Window 기법으로 대화 맥락을 최적화하여 Gemini API에 전달합니다.
 3.  **Intelligence (Gemini API)**: AI는 사용자 의도를 파악하고, Notion에 저장하기 적합한 형태(JSON/Markdown)로 내용을 구조화합니다.
@@ -70,25 +70,33 @@
 <br/>
 
 ## 화면
-화면 [1]
+*화면 [1]
 <img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/eb5b59a4-1d7a-4452-9eeb-789d7d50668b" />
+<br/>
 화면 [2]
 <img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/1120a663-0012-48ab-9001-49635ed134b5" />
+<br/>
 화면 [3]
 <img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/556c6ef3-961c-4eb2-86cb-151644c11f53" />
+<br/>
 화면 [4]
 <img width="1920" height="1080" alt="4" src="https://github.com/user-attachments/assets/6f654e55-5efb-4f17-9335-b12e0e4732ac" />
+<br/>
 화면 [5]
 <img width="1909" height="984" alt="5" src="https://github.com/user-attachments/assets/61bb2a5c-4394-4d92-b90e-6996f02f1b95" />
+<br/>
 화면 [6]
 <img width="1920" height="1080" alt="6" src="https://github.com/user-attachments/assets/d6cf6bac-1499-49d6-a7b9-037e8bbed4ca" />
+<br/>
 화면 [7]
 <img width="1920" height="1080" alt="7" src="https://github.com/user-attachments/assets/3b5f8c15-52d8-4111-9f75-3eb56c706379" />
+<br/>
 화면 [8]
 <img width="1920" height="1080" alt="8" src="https://github.com/user-attachments/assets/c17911b6-fd2e-49c7-bcd4-a5b9039206dc" />
+<br/>
 화면 [9]
 <img width="1915" height="987" alt="9" src="https://github.com/user-attachments/assets/f52e23f8-781a-4b9e-afd5-6e81e2484b33" />
-
+<br/>
 
 
 
@@ -96,15 +104,15 @@
 
 ## 기술적 도전 및 회고
 
-### 1. AI에게 '행동력' 부여하기 (From Chatbot to Agent)
+### 1. AI에게 행동력 부여하기
 가장 큰 고민은 "AI는 텍스트만 뱉을 뿐, 행동하지 않는다"는 점이었습니다. AI가 아무리 완벽한 요약본을 만들어도, 웹훅을 쏘는 기능은 없기 때문입니다.
-* **해결:** 백엔드 서버를 AI의 '신체(Body)'로 정의했습니다. AI가 반환한 데이터를 서버가 가로채서(Intercept), **Make Webhook**으로 `POST` 요청을 보내는 구조를 설계했습니다. 이를 통해 **"AI 모델(Brain) + 백엔드 로직(Body) = 에이전트(Agent)"**가 작동하는 원리를 직접 구현하고 이해했습니다.
+* **해결:** 백엔드 서버를 AI의 '신체(Body)'로 정의했습니다. AI가 반환한 데이터를 서버가 가로채서(Intercept), **Make Webhook**으로 `POST` 요청을 보내는 구조를 설계했습니다. 이를 통해 "AI 모델(Brain) + 백엔드 로직(Body) = 에이전트(Agent)"가 작동하는 원리를 직접 구현하고 이해했습니다.
 
-### 2. Context 유지와 비용 최적화 (Sliding Window)
+### 2. Context 유지와 비용 최적화
 API를 사용할 때 전체 대화 내역을 매번 전송하는 것은 비용과 속도 면에서 비효율적이었습니다.
 * **해결:** Java의 `List` 자료구조를 활용해 최근 N개의 대화 턴(Turn)만 유지하는 **Sliding Window** 알고리즘을 적용했습니다. 이를 통해 현재 주제에 대한 논리적 연속성은 유지하면서도 시스템 리소스를 효율적으로 관리했습니다.
 
-### 3. 데이터 자산화 (Knowledge Archiving)
+### 3. 데이터 자산화
 기존에는 휘발되던 개발 고민과 문제 해결 과정들이 NoteWise를 통해 자동으로 축적되기 시작했습니다.
 * **성과:** 별도의 정리 시간 없이도 Notion에 쌓인 데이터들은 향후 저만의 **Personal Knowledge Base**가 되어, 추후 RAG 시스템이나 개인화된 AI 모델을 구축하는 데 귀중한 자산이 될 것입니다.
 
