@@ -1,4 +1,4 @@
-# 📝 NoteWise Toy Project
+# 📝 NoteWise Project
 ### AI Agentic Workflow for Automated Knowledge Archiving
 
 > **NoteWise**는 Gemini AI와 Spring Boot, Make 자동화를 결합하여, 대화 내용을 Notion 지식 베이스로 즉시 구조화하는 **AI 에이전트 서비스**입니다.
