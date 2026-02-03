@@ -24,7 +24,7 @@
 
 <br/>
 
-## 🛠 기술 스택 (Tech Stack)
+## 기술 스택
 
 ### Backend
 ![Java](https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
