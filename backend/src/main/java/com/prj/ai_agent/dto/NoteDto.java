@@ -5,8 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor  // 🔥 추가: public NoteDto() { } 생성
-@AllArgsConstructor // 🔥 추가: 모든 필드를 받는 생성자 생성
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Builder
 public class NoteDto {

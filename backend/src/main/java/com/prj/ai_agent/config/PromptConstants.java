@@ -12,11 +12,11 @@ public class PromptConstants {
         2. Language Purity: NEVER use Chinese characters (Hanja) or Japanese particles.
         3. Technical Terms: Use 'Korean(English)' format. (e.g., 객체지향(Object-Oriented))
         
-        [❌ NO MARKDOWN SYMBOLS]
+        [NO MARKDOWN SYMBOLS]
         - NEVER use symbols like '#', '##', '###', '**', '__', '`', or '>'.
         - Use '[ Section Title ]' format with clear line breaks for headers.
 
-        [✅ TEXT-BASED STRUCTURE]
+        [TEXT-BASED STRUCTURE]
         - Use '-' or '•' for bullet points.
         - Use double line breaks between sections for readability.
 

@@ -32,15 +32,14 @@ public class GeminiService {
 
         String requestUrl = apiUrl + "?key=" + apiKey;
 
-        // 1. System Instruction (Professor Persona)
+        // System Instruction (Persona)
         String systemPrompt = PromptConstants.PROFESSOR_SYSTEM_PROMPT;
 
-        // 2. User Prompt 구성 및 대화 이력(chatHistory)에 추가
+        // User Prompt 구성 및 대화 이력(chatHistory)에 추가
         String userPrompt = "Professor, please explain this topic: " + userInput;
-        // 현재 질문을 대화 이력에 넣습니다.
+        // 현재 질문을 대화 이력에 삽입.
         chatHistory.add(Map.of("role", "user", "parts", List.of(Map.of("text", userPrompt))));
-
-        // 3. JSON Body Construction (전체 chatHistory를 contents에 넣음)
+        // JSON Body Construction (전체 chatHistory를 contents에 넣음)
         Map<String, Object> requestBody = Map.of(
                 "system_instruction", Map.of(
                         "parts", List.of(Map.of("text", systemPrompt))
@@ -57,7 +56,7 @@ public class GeminiService {
                     .retrieve()
                     .body(String.class);
 
-            // 4. AI 답변을 이력에 추가하기 위해 텍스트만 먼저 추출
+            // AI 답변을 이력에 추가하기 위해 텍스트만 먼저 추출
             JsonNode root = objectMapper.readTree(response);
             String aiText = root.path("candidates").get(0)
                     .path("content").path("parts").get(0)
@@ -66,11 +65,11 @@ public class GeminiService {
             // 모델의 답변도 대화 이력에 저장 (다음 대화의 맥락이 됨)
             chatHistory.add(Map.of("role", "model", "parts", List.of(Map.of("text", aiText))));
 
-            // 5. 기존 파싱 메서드 호출하여 NoteDto 반환
+            // 파싱 메서드 호출하여 NoteDto 반환
             return parseResponse(response, userInput);
 
         } catch (Exception e) {
-            log.error("❌ Gemini API Call Failed", e);
+            log.error("Gemini API Call Failed", e);
             return null;
         }
     }
@@ -102,6 +101,7 @@ public class GeminiService {
                 // 질문의 앞부분 10글자를 제목으로 자동 생성
                 title = originalInput.length() > 15 ? originalInput.substring(0, 15) + "..." : originalInput;
             }
+
             if (summary.isEmpty()) {
                 // 태그가 없으면 전체 텍스트를 본문으로 간주
                 summary = text.replace("[TITLE]", "").replace("[SUMMARY]", "").trim();
@@ -110,9 +110,10 @@ public class GeminiService {
             NoteDto noteDto = new NoteDto();
             noteDto.setTitle(title);
             noteDto.setSummary(summary);
+
             return noteDto;
         } catch (Exception e) {
-            log.error("❌ 파싱 실패", e);
+            log.error("파싱 실패", e);
             return null;
         }
     }
