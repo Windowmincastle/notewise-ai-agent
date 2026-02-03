@@ -70,15 +70,28 @@
 <br/>
 
 ## 화면
+화면 [1]
 <img width="1920" height="1080" alt="1" src="https://github.com/user-attachments/assets/eb5b59a4-1d7a-4452-9eeb-789d7d50668b" />
+화면 [2]
 <img width="1920" height="1080" alt="2" src="https://github.com/user-attachments/assets/1120a663-0012-48ab-9001-49635ed134b5" />
+화면 [3]
 <img width="1920" height="1080" alt="3" src="https://github.com/user-attachments/assets/556c6ef3-961c-4eb2-86cb-151644c11f53" />
+화면 [4]
 <img width="1920" height="1080" alt="4" src="https://github.com/user-attachments/assets/6f654e55-5efb-4f17-9335-b12e0e4732ac" />
+화면 [5]
 <img width="1909" height="984" alt="5" src="https://github.com/user-attachments/assets/61bb2a5c-4394-4d92-b90e-6996f02f1b95" />
+화면 [6]
 <img width="1920" height="1080" alt="6" src="https://github.com/user-attachments/assets/d6cf6bac-1499-49d6-a7b9-037e8bbed4ca" />
+화면 [7]
 <img width="1920" height="1080" alt="7" src="https://github.com/user-attachments/assets/3b5f8c15-52d8-4111-9f75-3eb56c706379" />
+화면 [8]
 <img width="1920" height="1080" alt="8" src="https://github.com/user-attachments/assets/c17911b6-fd2e-49c7-bcd4-a5b9039206dc" />
+화면 [9]
 <img width="1915" height="987" alt="9" src="https://github.com/user-attachments/assets/f52e23f8-781a-4b9e-afd5-6e81e2484b33" />
+
+
+
+
 
 
 ## 기술적 도전 및 회고
