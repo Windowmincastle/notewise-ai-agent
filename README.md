@@ -1,22 +1,22 @@
-# 📝 NoteWise
-### : AI Agentic Workflow for Automated Knowledge Archiving
+# NoteWise
+### AI Agentic Workflow for Automated Knowledge Archiving
 
 > **"Brain(AI) needs Body(Server) to act."**
 > **NoteWise**는 Gemini AI와 Spring Boot, Make 자동화를 결합하여, 대화 내용을 Notion 지식 베이스로 즉시 구조화하는 **AI 에이전트 서비스**입니다.
 
 <br/>
 
-## 📢 프로젝트 소개
+## 프로젝트 소개
 
-### 1. 개발 배경 (Why NoteWise?)
+### 개발 배경
 평소 개발 학습과 프로젝트를 진행하며 하루에도 수십 번씩 AI와 기술적인 토의를 합니다. 하지만 이 과정에서 두 가지 결정적인 한계를 느꼈습니다.
 
-1.  **"복사 & 붙여넣기의 비효율 (Inefficiency)"**: AI가 생성한 통찰력 있는 코드나 개념 설명을 다시 Notion에 옮겨 적는 과정이 너무 번거로웠고, 귀찮음으로 인해 유실되는 지식(Missing Context)이 너무 많았습니다.
-2.  **"AI의 행동 제약 (Action Gap)"**: LLM(Gemini)은 똑똑한 '뇌'를 가졌지만, 스스로 외부 시스템(Notion)에 데이터를 저장하는 '손발'이 없습니다. "이거 저장해줘"라고 말하면 실제로 저장하는 것이 아니라, 텍스트로만 대답할 뿐입니다.
+1.  **"복사 & 붙여넣기의 비효율 (Inefficiency)"**: AI가 생성한 통찰력 있는 코드나 개념 설명을 다시 Notion에 옮겨 적는 과정이 너무 번거로웠고, 귀찮음으로 인해 유실되는 지식이 너무 많았습니다.
+2.  **"AI의 행동 제약 (Action Gap)"**: LLM(Gemini)은 똑똑한 '뇌'를 가졌지만, 스스로 외부 시스템에 데이터를 저장하는 '손발'이 없습니다. "이거 저장해줘"라고 말하면 실제로 저장하는 것이 아니라, 텍스트로만 대답할 뿐입니다.
 
 ### 2. 프로젝트 목표
-**NoteWise**는 이러한 간극을 메우기 위해 시작되었습니다.
-* **Knowledge Archiving Automation**: 사용자가 AI와 대화하는 것만으로, 학습 내용과 개발 산출물이 자동으로 분류되어 Notion 데이터베이스에 쌓입니다.
+**NoteWise**는 이러한 불편함을 없애고자 시작되었습니다.
+* **Knowledge Archiving Automation**: 사용자가 AI와 대화하는 것만으로, 학습 내용과 개발 산출물이 자동으로 정리되어 데이터베이스에 쌓입니다.
 * **Bridge the Gap**: Spring Boot 서버를 구축하여 AI의 텍스트 응답을 실질적인 '데이터'로 변환하고, Make(Webhook)를 통해 Notion API를 트리거합니다.
 * **Context Continuity**: 단발성 질문이 아닌, 대화의 맥락을 유지하며 지식을 고도화할 수 있는 환경을 제공합니다.
 
@@ -24,7 +24,7 @@
 
 <br/>
 
-## ⚙️ 시스템 아키텍처
+## 시스템 아키텍처
 
 ![System Architecture](여기에_아키텍처_이미지_경로를_넣어주세요)
 
@@ -41,7 +41,6 @@
 ### Backend
 ![Java](https://img.shields.io/badge/Java_17-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot_3.5.9-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)
-![Lombok](https://img.shields.io/badge/Lombok-BC0230?style=for-the-badge&logo=lombok&logoColor=white)
 
 ### Frontend
 ![React](https://img.shields.io/badge/React_19-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
@@ -57,18 +56,21 @@
 
 <br/>
 
-## 📌 주요 기능
+## 주요 기능
 
 | 기능 | 설명 |
 | :--- | :--- |
-| **💬 Smart Chat Interface** | React 19 기반의 부드러운 채팅 UI. Sliding Window 기법을 적용하여 토큰 비용을 아끼면서도 대화의 맥락을 기억합니다. |
+| **💬 Smart Chat Interface** | React 19 기반의 부드러운 채팅 UI. |
 | **⚡ Notion Webhook Trigger** | 핵심 기능. AI가 정리한 내용을 서버가 받아 Make의 Webhook URL로 전송, Notion DB에 즉시 저장합니다. |
-| **🧠 Archivist Persona** | AI에게 단순 챗봇이 아닌 '전문 지식 관리자' 페르소나를 부여하여, 나중에 찾아보기 쉬운 형태(요약, 태그 등)로 답변하도록 튜닝했습니다. |
+| **🧠 Archivist Persona** | AI에게 단순 챗봇이 아닌 'IT 전문가' 페르소나를 부여하여, 나중에 찾아보기 쉬운 형태(요약, 태그 등)로 답변하도록 튜닝했습니다. |
 | **🔄 End-to-End Workflow** | `질문 -> 분석 -> 구조화 -> 적재`의 전 과정을 사용자의 추가 개입 없이 한 번의 대화로 완료합니다. |
 
 <br/>
 
-## 💡 기술적 도전 및 회고 (Technical Retrospective)
+## 화면
+
+
+## 기술적 도전 및 회고
 
 ### 1. AI에게 '행동력' 부여하기 (From Chatbot to Agent)
 가장 큰 고민은 "AI는 텍스트만 뱉을 뿐, 행동하지 않는다"는 점이었습니다. AI가 아무리 완벽한 요약본을 만들어도, 웹훅을 쏘는 기능은 없기 때문입니다.
@@ -83,15 +85,3 @@ API를 사용할 때 전체 대화 내역을 매번 전송하는 것은 비용�
 * **성과:** 별도의 정리 시간 없이도 Notion에 쌓인 데이터들은 향후 저만의 **Personal Knowledge Base**가 되어, 추후 RAG 시스템이나 개인화된 AI 모델을 구축하는 데 귀중한 자산이 될 것입니다.
 
 <br/>
-
-## 🏃 Getting Started
-
-```bash
-# Frontend
-cd frontend
-npm install
-npm run dev
-
-# Backend
-cd backend
-./gradlew bootRun
