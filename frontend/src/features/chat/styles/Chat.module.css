@@ -108,7 +108,6 @@
   overflow: hidden;
 }
 
-/* Welcome Screen */
 .welcomeScreen {
   flex: 1;
   display: flex;
@@ -140,7 +139,6 @@
   font-weight: 400;
 }
 
-/* Message List */
 .messageList {
   flex: 1;
   overflow-y: auto;
@@ -167,7 +165,6 @@
   background: var(--text-secondary);
 }
 
-/* Message Wrapper */
 .messageWrapper {
   display: flex;
   gap: 0.75rem;
@@ -185,7 +182,6 @@
   justify-content: flex-start;
 }
 
-/* Avatar */
 .avatar {
   flex-shrink: 0;
   width: 50px;
@@ -202,7 +198,6 @@
   background-color: var(--bg-secondary);
 }
 
-/* Message Content */
 .messageContent {
   display: flex;
   flex-direction: column;
@@ -217,7 +212,6 @@
   align-items: flex-start;
 }
 
-/* Message Bubble */
 .messageBubble {
   padding: 1rem 1.25rem;
   border-radius: var(--border-radius-md);
@@ -245,7 +239,6 @@
   white-space: pre-wrap;
 }
 
-/* Typing Indicator */
 .typingIndicator {
   display: flex;
   gap: 6px;
@@ -282,7 +275,6 @@
   }
 }
 
-/* Action Button */
 .actionButton {
   margin-top: 0.5rem;
   padding: 0.5rem 1rem;
@@ -305,7 +297,6 @@
   box-shadow: var(--shadow-soft);
 }
 
-/* Input Container */
 .inputContainer {
   position: absolute;
   bottom: 0;
@@ -346,8 +337,8 @@
   font-family: var(--font-body);
   line-height: 1.5;
   resize: none;
-  min-height: 24px; /* 최소 높이 */
-  max-height: 150px; /* 최대 높이 (여기서 조절) */
+  min-height: 24px;
+  max-height: 150px;
   overflow-y: auto;
 }
 
@@ -387,7 +378,6 @@
   transform: scale(1);
 }
 
-/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -421,7 +411,6 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 1024px) {
   .sidebar {
     width: 240px;

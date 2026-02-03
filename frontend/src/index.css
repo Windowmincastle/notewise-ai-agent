@@ -7,7 +7,7 @@ body {
   display: flex;
   min-width: 320px;
   min-height: 100vh;
-  background-color: #f4f7f6; /* 부드러운 배경색 */
+  background-color: #f4f7f6;
 }
 
 #root {
