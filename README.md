@@ -70,7 +70,7 @@
 | **💬 Smart Chat Interface** | React 19 기반의 채팅 UI. |
 | **⚡ Notion Webhook Trigger** | 핵심 기능. AI가 정리한 내용을 서버가 받아 Make의 Webhook URL로 전송, Notion DB에 즉시 저장합니다. |
 | **🧠 Archivist Persona** | AI에게 단순 챗봇이 아닌 'IT 전문가' 페르소나를 부여하여, 나중에 찾아보기 쉬운 형태(요약, 태그 등)로 답변하도록 튜닝. |
-| **🔄 End-to-End Workflow** | `질문 -> 분석 -> 구조화 -> 적재`의 전 과정을 사용자의 추가 개입 없이 한 번의 대화로 완료. |
+| **🔄 End-to-End Workflow** | 질문 -> 분석 -> 구조화 -> 적재의 전 과정을 사용자의 추가 개입 없이 한 번의 대화로 완료. |
 
 <br/>
 <br/>
